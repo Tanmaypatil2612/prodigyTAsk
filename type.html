@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./styles.css">
+    <style>
+        *
+{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+.container
+{
+    width: 100%;
+    height: 100vh;
+    background-color:#31363F ;
+}
+.headder
+{
+    width: 100%;
+    height: 30%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+    top: 20px;
+}
+.heading
+{
+
+    margin: 10px;
+    font-size: 1.5em;
+    color: #0f141c;
+}
+.timer
+{
+    width: 80px;
+    height: 60px;
+    
+    margin-top: 50px;
+    border-radius: 25px;
+    background-color: rgba(0, 0, 0, 0.1);
+    box-shadow: 2px 2px 30px rgba(0,0,0,0.5);
+}
+.main
+{
+    width: 100%;
+    height: 50vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.textarea
+{
+    width: 80%;
+    height: 30%;
+    border-radius: 25px;
+    box-shadow: inset 5px 2px 60px rgba(255,255,255,0.2);
+    position: relative;
+}
+.inputarea
+{
+    width: 80%;
+    height: 50%;
+    border: 1px solid;
+    border-radius: 25px 0;
+    box-shadow: inset 5px 2px 60px rgba(0,0,0,0.2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0,0,0,0.2);
+}
+
+.footer
+{
+    width: 90%;
+    height: 50px;
+    margin-left: 5%;
+    margin-top: 5%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#randomq
+{
+    margin-top: 18px;
+    margin-left: 30px;
+    width: 550px;
+    font-size: 1.5em;
+    color: #0f141c;
+}
+#inputarea
+{
+    width: 99%;
+    height: 95%;
+    border-radius: 25px 0;
+    background: #31363F;
+    font-size: 1.5em;
+}
+
+.correct
+{
+    color: green;
+}
+.incorrect
+{
+    color: red;
+    text-decoration: underline;
+}
+.timer
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="headder">
+            <div class="heading"><h1>Typo</h1></div>
+            <div class="timer"><h1 id="time"></h1></div>
+        </div>
+        <div class="main">
+            <div class="textarea"><p id="randomq">asddafasf </p></div>
+            <div class="inputarea"><input type="text" id="inputarea"></div>
+        </div>
+        <div class="footer"><h2>your typing speed is : <span id="speed"></span></h2></div>
+    </div>
+    <script>
+        const randomparaurl = 'https://api.quotable.io/random';
+        const textarea = document.getElementById('randomq');
+        const input = document.getElementById('inputarea');
+        const timer = document.getElementById('time');
+        
+        input.addEventListener('input', () => {
+            const arrayPara = textarea.querySelectorAll('span');
+            const arrayValue = input.value.split('');
+        
+            let correct = true;
+            arrayPara.forEach((characterSpan, index) => {
+                const character = arrayValue[index];
+                if (character === undefined) { // Changed from null to undefined
+                    characterSpan.classList.remove('correct');
+                    characterSpan.classList.remove('incorrect');
+                    correct = false;
+                } else if (character === characterSpan.innerText) {
+                    characterSpan.classList.add('correct');
+                    characterSpan.classList.remove('incorrect');
+                } else {
+                    characterSpan.classList.remove('correct');
+                    characterSpan.classList.add('incorrect');
+                    correct = false;
+                }
+            });
+        
+            if (correct) getNextPara();
+        });
+        
+        function get_random_para() {
+            return fetch(randomparaurl)
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch random paragraph');
+                    }
+                    return response.json(); // Return the parsed JSON data
+                }) 
+                .then((data) => {
+                    return data.content; // Return the content of the fetched paragraph
+                })
+                .catch((error) => {
+                    console.error('Error fetching random paragraph:', error.message);
+                    throw error; // Rethrow the error to propagate it to the caller
+                });
+        }
+        
+        async function getNextPara() {
+            try {
+                const para = await get_random_para();
+                textarea.innerText = '';
+                para.split('').forEach(character => {
+                    const characterSpan = document.createElement('span');
+                    characterSpan.innerText = character;
+                    textarea.appendChild(characterSpan);
+                });
+            } catch (error) {
+                console.error('Error getting next paragraph:', error.message);
+            }
+            input.value = '';
+            startTimer();
+        }
+        
+        let timerInterval; // Store interval reference
+        
+        function startTimer() {
+            timer.innerText = 0;
+            clearInterval(timerInterval); // Clear previous interval
+            startTime = new Date();
+            timerInterval = setInterval(() => {
+                timer.innerText = gettimertime();
+            }, 1000);
+        }
+        
+        function gettimertime() {
+            return parseInt((new Date() - startTime) / 1000); // Convert to integer
+        }
+        
+        getNextPara();
+        </script>
+</body>
+</html>
