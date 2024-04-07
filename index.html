@@ -120,6 +120,37 @@
     justify-content: center;
     align-items: center;
 }
+/* Common styles for all devices */
+
+/* Media query for mobile devices */
+@media screen and (max-width: 767px) {
+    .container {
+        padding: 10px; /* Adjust container padding for mobile devices */
+    }
+    .headder {
+        top: 10px; /* Adjust header position for mobile devices */
+    }
+    .timer {
+        margin-top: 30px; /* Adjust timer margin for mobile devices */
+    }
+    .main {
+        height: 40vh; /* Adjust main height for mobile devices */
+    }
+    #randomq {
+        margin-top: 10px; /* Adjust random text margin for mobile devices */
+        margin-left: 10px; /* Adjust random text margin for mobile devices */
+        width: auto; /* Allow random text width to adjust for mobile devices */
+        font-size: 1.2em; /* Adjust font size for mobile devices */
+    }
+    #inputarea {
+        width: 95%; /* Adjust input area width for mobile devices */
+        font-size: 1.2em; /* Adjust font size for mobile devices */
+    }
+    .footer {
+        margin-top: 20px; /* Adjust footer margin for mobile devices */
+    }
+}
+
     </style>
 </head>
 <body>
