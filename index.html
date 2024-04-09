@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Typo</title>
     <link rel="stylesheet" href="./styles.css">
     <style>
         *
@@ -64,8 +64,9 @@
     border-radius: 25px;
     box-shadow: inset 5px 2px 60px rgba(255,255,255,0.2);
     position: relative;
+    overflow: auto;
 }
-.inputarea
+/* .inputarea
 {
     width: 80%;
     height: 50%;
@@ -76,7 +77,7 @@
     justify-content: center;
     align-items: center;
     background: rgba(0,0,0,0.2);
-}
+} */
 
 .footer
 {
@@ -92,17 +93,17 @@
 {
     margin-top: 18px;
     margin-left: 30px;
-    width: 550px;
+    width: inherit;
     font-size: 1.5em;
     color: #0f141c;
 }
 #inputarea
 {
-    width: 99%;
-    height: 95%;
-    border-radius: 25px 0;
+    width: 1200px;
+    height: 200px;
     background: #31363F;
-    font-size: 0.5em;
+    font-size: 1.5em;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
 .correct
@@ -161,7 +162,7 @@
         </div>
         <div class="main">
             <div class="textarea"><p id="randomq"></p></div>
-            <div class="inputarea"><input type="text" id="inputarea"></div>
+            <input type="text" id="inputarea">
         </div>
         <div class="footer"><h2>your typing speed is : <span id="speed"></span></h2></div>
     </div>
@@ -170,6 +171,8 @@
         const textarea = document.getElementById('randomq');
         const input = document.getElementById('inputarea');
         const timer = document.getElementById('time');
+        const speed = document.getElementById('speed') ;
+
         
         input.addEventListener('input', () => {
             const arrayPara = textarea.querySelectorAll('span');
@@ -242,6 +245,16 @@
         function gettimertime() {
             return parseInt((new Date() - startTime) / 1000); // Convert to integer
         }
+
+        function calculateTypingSpeed() {
+        const totalCharactersTyped = textarea.innerText.length;
+        const totalTimeInSeconds = gettimertime();
+        const charactersPerMinute = totalCharactersTyped / (totalTimeInSeconds / 60);
+        typingSpeed = Math.round(charactersPerMinute);
+        speed.innerText = typingSpeed ;
+        
+    }
+        
         
         getNextPara();
         </script>
